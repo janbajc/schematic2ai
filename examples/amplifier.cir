@@ -1,0 +1,12 @@
+* Common-emitter amplifier (smoke-test fixture for schematic2ai)
+VCC  VCC  0     12
+VIN  IN   0     SIN(0 10m 1k)
+R1   VCC  B     47k
+R2   B    0     10k
+RC   VCC  C     4.7k
+RE   E    0     1k
+CIN  IN   B     10u
+COUT C    OUT   10u
+CE   E    0     100u
+Q1   C    B  E  2N3904
+.end

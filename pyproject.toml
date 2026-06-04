@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "schematic2ai"
+version = "0.1.0"
+description = "Convert schematics (PDF, images, KiCad, Altium, EAGLE, SPICE, Gerber) into AI-readable JSON + Markdown."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Jan" }]
+dependencies = [
+    # PDF + image processing
+    "pdfplumber>=0.11.0",
+    "pypdfium2>=4.30.0",
+    "Pillow>=10.0.0",
+    # OCR for image/PDF schematics (optional at runtime — handled gracefully if missing)
+    "pytesseract>=0.3.10",
+    # KiCad / Altium / EAGLE parsing via sexpdata + XML
+    "sexpdata>=1.0.2",
+    "lxml>=5.0.0",
+    # CLI
+    "click>=8.1.0",
+    "rich>=13.7.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.5"]
+
+[project.scripts]
+sch2ai = "schematic2ai.cli:_entrypoint"
+schtoai = "schematic2ai.cli:_entrypoint"
+schematic2ai = "schematic2ai.cli:_entrypoint"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
