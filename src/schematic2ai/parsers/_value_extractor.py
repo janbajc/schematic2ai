@@ -203,8 +203,8 @@ def _extract_pairs(
 
     *window* controls how many tokens around a refdes we consider when
     looking for a compatible value/footprint/part-number. Empirically 4
-    works well for EDA-exported PDFs of complex boards (the Z-Wave gateway
-    schematic has up to ~3 unrelated tokens between a ref and its value).
+    works well for EDA-exported PDFs of complex boards (up to ~3 unrelated
+    tokens can appear between a ref and its value).
     """
     tokens = _tokenize(text)
     out: dict[str, dict[str, str]] = {}
