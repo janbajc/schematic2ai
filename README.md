@@ -145,6 +145,63 @@ exporter consumes. To add a new input format, write a parser in
   ground-truth, use `kicad-cli sch export netlist` and feed the resulting SPICE
   netlist to `schematic2ai`.
 
+## Benchmarking
+
+The repo ships two complementary benchmarks under `benchmarks/` and
+`tests/benchmarks/`. Install the dev extras first:
+
+```bash
+pip install -e ".[dev]"
+```
+
+### Accuracy (extraction quality)
+
+`benchmarks/accuracy.py` scores every example against the ground truth in
+`benchmarks/ground_truth.yaml` and reports, per file and in aggregate:
+
+- **format detection** — was the right parser selected?
+- **component precision / recall / F1** — by reference designator
+- **net recall** — by net name (where ground truth lists nets)
+- **connection-count ratio** — extracted vs. expected
+- **classification accuracy** — fraction of components whose inferred `kind`
+  matches the expected category
+- **parse time** per file
+
+```bash
+python benchmarks/accuracy.py                       # human-readable table
+python benchmarks/accuracy.py --json                # machine-readable
+python benchmarks/accuracy.py --min-f1 0.95 --min-kind-acc 1.0   # gate CI
+```
+
+The script exits non-zero if format detection regresses or a threshold is
+missed, so it can be wired into CI. Add a new example by dropping the file in
+`examples/` and adding an entry to `ground_truth.yaml`.
+
+### Performance (speed)
+
+`tests/benchmarks/test_perf.py` uses
+[`pytest-benchmark`](https://pytest-benchmark.readthedocs.io/) to measure parse
+throughput and full parse→JSON→Markdown export latency. Benchmarks are marked
+`benchmark` and **excluded from the normal test run** so the suite stays fast;
+run them explicitly:
+
+```bash
+pytest tests/benchmarks -m benchmark --benchmark-only
+```
+
+Useful flags: `--benchmark-columns=min,mean,max`, `--benchmark-autosave` to
+record a baseline, and `--benchmark-compare` to diff against it.
+
+### Determinism
+
+The diff output is contractually byte-identical across runs. Verify with:
+
+```bash
+sch2ai diff examples/amplifier.cir examples/diff_pair.cir -o /tmp/d1 --quiet
+sch2ai diff examples/amplifier.cir examples/diff_pair.cir -o /tmp/d2 --quiet
+diff -r /tmp/d1 /tmp/d2 && echo "deterministic ✓"
+```
+
 ## License
 
 MIT

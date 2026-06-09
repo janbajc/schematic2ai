@@ -26,7 +26,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "ruff>=0.5"]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.5",
+    "pytest-benchmark>=4.0",
+    "pyyaml>=6.0",
+]
 
 [project.scripts]
 sch2ai = "schematic2ai.cli:_entrypoint"
@@ -39,3 +44,11 @@ where = ["src"]
 [tool.ruff]
 line-length = 100
 target-version = "py39"
+
+[tool.pytest.ini_options]
+# Keep the default run fast: skip performance benchmarks unless explicitly
+# requested with `pytest tests/benchmarks` or `-m benchmark`.
+addopts = "-m 'not benchmark'"
+markers = [
+    "benchmark: performance benchmarks (require pytest-benchmark; run explicitly).",
+]

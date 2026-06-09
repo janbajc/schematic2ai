@@ -1,0 +1,89 @@
+# Ground-truth expectations for the example schematics.
+#
+# Used by `benchmarks/accuracy.py` to score the parsers. For SPICE netlists the
+# truth is authoritative (the netlist *is* the connectivity), so these numbers
+# come straight from the source files. When you add a new example, add an entry
+# here so it is scored.
+#
+# Schema per entry:
+#   file:            path relative to the repo root
+#   format:          expected source_format the detector should choose
+#   components:      exact set of reference designators expected
+#   nets:            exact set of net names expected
+#   connections:     expected number of point-to-point connections
+#   kinds:           reference -> expected classified `kind`
+
+examples/voltage_divider.cir:
+  format: spice
+  components: [VIN, R1, R2]
+  nets: ["IN", "OUT", "0"]
+  connections: 3
+  kinds:
+    VIN: voltage source
+    R1: resistor
+    R2: resistor
+
+examples/rc_bandpass.cir:
+  format: spice
+  components: [VIN, R1, R2, C1, C2]
+  connections: 6
+  kinds:
+    VIN: voltage source
+    R1: resistor
+    R2: resistor
+    C1: capacitor
+    C2: capacitor
+
+examples/mosfet_inverter.cir:
+  format: spice
+  components: [VDD, VIN, M1, M2]
+  connections: 6
+  kinds:
+    VDD: voltage source
+    VIN: voltage source
+    M1: transistor (MOSFET)
+    M2: transistor (MOSFET)
+
+examples/rectifier.cir:
+  format: spice
+  components: [VAC, D1, D2, D3, D4, C1, RLOAD]
+  connections: 10
+  kinds:
+    VAC: voltage source
+    D1: diode
+    D2: diode
+    D3: diode
+    D4: diode
+    C1: capacitor
+    RLOAD: resistor
+
+examples/amplifier.cir:
+  format: spice
+  components: [VCC, VIN, R1, R2, RC, RE, CIN, COUT, CE, Q1]
+  connections: 14
+  kinds:
+    VCC: voltage source
+    VIN: voltage source
+    R1: resistor
+    R2: resistor
+    RC: resistor
+    RE: resistor
+    CIN: capacitor
+    COUT: capacitor
+    CE: capacitor
+    Q1: transistor (BJT)
+
+examples/diff_pair.cir:
+  format: spice
+  components: [VCC, VINP, VINM, RC1, RC2, RE, ITAIL, Q1, Q2]
+  connections: 13
+  kinds:
+    VCC: voltage source
+    VINP: voltage source
+    VINM: voltage source
+    RC1: resistor
+    RC2: resistor
+    RE: resistor
+    ITAIL: current source
+    Q1: transistor (BJT)
+    Q2: transistor (BJT)
