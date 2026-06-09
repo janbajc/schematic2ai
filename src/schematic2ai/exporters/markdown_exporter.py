@@ -64,13 +64,27 @@ def _render(s: Schematic) -> str:
     if s.components:
         lines.append("## Components")
         lines.append("")
-        lines.append("| Ref | Value | Footprint | Description |")
-        lines.append("|-----|-------|-----------|-------------|")
+        lines.append("| Ref | Kind | Value | Footprint | Description |")
+        lines.append("|-----|------|-------|-----------|-------------|")
         for c in sorted(s.components, key=lambda x: _ref_key(x.reference)):
+            kind = c.classified_kind(s.source_format)
             lines.append(
-                f"| `{c.reference}` | {_esc(c.value)} | {_esc(c.footprint)} | {_esc(c.description)} |"
+                f"| `{c.reference}` | {_esc(kind)} | {_esc(c.value)} | "
+                f"{_esc(c.footprint)} | {_esc(c.description)} |"
             )
         lines.append("")
+
+        # Quick breakdown by category — helps the model grasp the design at a glance.
+        counts: dict[str, int] = {}
+        for c in s.components:
+            kind = c.classified_kind(s.source_format) or "unclassified"
+            counts[kind] = counts.get(kind, 0) + 1
+        if counts:
+            breakdown = ", ".join(
+                f"{n}× {k}" for k, n in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
+            )
+            lines.append(f"**Breakdown:** {breakdown}")
+            lines.append("")
 
     # ------------------------------------------------------------------ nets
     if s.nets:
