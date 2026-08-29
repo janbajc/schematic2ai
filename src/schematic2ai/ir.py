@@ -168,7 +168,7 @@ class Net:
 class Schematic:
     """The canonical schematic representation."""
     source_file: str = ""
-    source_format: str = ""    # "pdf" | "image" | "kicad" | "altium" | "eagle" | "spice" | "gerber"
+    source_format: str = ""    # "pdf" | "image" | "kicad" | "altium" | "eagle" | "spice" | "gerber" | "kicad_netlist"
     title: str = ""
     revision: str = ""
     author: str = ""

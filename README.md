@@ -8,6 +8,7 @@ you can hand them to an LLM.
 | Format            | Extension(s)                      | Extraction quality           |
 |-------------------|-----------------------------------|------------------------------|
 | KiCad             | `.kicad_sch`, `.sch` (legacy)     | Components + named nets      |
+| KiCad netlist     | `.net` (s-expression)             | Full netlist (components + nets + pin connections) |
 | EAGLE             | `.sch` (XML)                      | Components + nets + pinrefs  |
 | Altium            | `.SchDoc`, `.SchLib`              | Best-effort string scrape    |
 | SPICE netlist     | `.cir`, `.sp`, `.net`, `.spice`   | Full netlist (components + connections) |
@@ -59,6 +60,7 @@ The tool installs **three equivalent commands** — use whichever you prefer:
 sch2ai path/to/schematic.pdf
 sch2ai design.kicad_sch -o out/ --format json
 sch2ai amplifier.cir --format md
+sch2ai board.net
 
 # Diff two revisions of the same schematic.
 sch2ai diff old.pdf new.pdf -o out/
@@ -142,8 +144,25 @@ exporter consumes. To add a new input format, write a parser in
 - Altium `.SchDoc` is a proprietary binary; only ASCII strings are recovered.
   Export to PDF from Altium for best results.
 - KiCad net resolution is approximate — only *named* labels become nets. For
-  ground-truth, use `kicad-cli sch export netlist` and feed the resulting SPICE
-  netlist to `schematic2ai`.
+  ground truth, feed the exported netlist instead (see below).
+
+### Getting full connectivity out of KiCad
+
+Export the default netlist (no `--format` flag) and convert the `.net` file:
+
+```sh
+kicad-cli sch export netlist path/to/board.kicad_sch
+sch2ai path/to/board.net
+```
+
+The default s-expression netlist carries every symbol — including connectors
+and ICs without SPICE models — with pin-level connectivity and pin names
+(e.g. `GPIO4_5`). It is auto-detected by content, so a `.net` file is routed
+to the KiCad netlist parser rather than the SPICE parser.
+
+> **Note:** do **not** use `--format spice`. The SPICE export drops every
+> symbol that has no SPICE model attached — on a typical board that silently
+> removes all connectors and most ICs, producing an amputated netlist.
 
 ## Benchmarking
 
