@@ -15,3 +15,5 @@ output/
 # Test schematics (large binary files)
 *.pdf
 *.SchDoc
+# Nix build output
+result/*
