@@ -44,7 +44,7 @@ class SpiceParser(BaseParser):
     @classmethod
     def can_parse(cls, path: Path) -> bool:
         return path.suffix.lower() in {".cir", ".sp", ".spice"} or (
-            path.suffix.lower() == ".net" and not _looks_like_eagle_or_pads(path)
+            path.suffix.lower() == ".net" and not _looks_like_non_spice(path)
         )
 
     def parse(self, path: Path, output_dir=None) -> Schematic:
@@ -137,9 +137,9 @@ class SpiceParser(BaseParser):
         return sch
 
 
-def _looks_like_eagle_or_pads(path: Path) -> bool:
+def _looks_like_non_spice(path: Path) -> bool:
     try:
-        head = path.read_text(errors="ignore")[:256].lower()
+        head = path.read_text(errors="ignore")[:256].lstrip().lower()
     except OSError:
         return False
-    return "<?xml" in head or head.startswith("!pads")
+    return "<?xml" in head or head.startswith("!pads") or head.startswith("(export")
