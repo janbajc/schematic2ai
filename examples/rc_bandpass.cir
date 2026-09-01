@@ -1,0 +1,10 @@
+* RC Band-Pass Filter — educational example
+* Source: ngspice measure example (rc-meas-ac.sp)
+* Topology: first-order high-pass (C2-R2) followed by first-order low-pass (R1-C1)
+* Center frequency ≈ 1/(2π√(R1·C1·R2·C2)) ≈ ~500 kHz
+VIN  in   0   DC 0 AC 1
+R1   in   mid1  1k
+C1   mid1 0     1n
+C2   mid1 out   500p
+R2   out  0     1k
+.end

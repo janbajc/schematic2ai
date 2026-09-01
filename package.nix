@@ -46,9 +46,6 @@ python3Packages.buildPythonApplication {
   # Applies to all three entry points (sch2ai, schtoai, schematic2ai).
   makeWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath [ tesseract ]) ];
 
-  # examples/diff_pair.cir referenced by tests + README but not committed upstream
-  disabledTests = [ "test_diff_pair_markdown_has_kind_and_breakdown" ];
-
   meta = {
     description = "Convert schematics (PDF, images, KiCad, Altium, EAGLE, SPICE, Gerber) into AI-readable JSON + Markdown";
     homepage = "https://github.com/janbajc/schematic2ai";

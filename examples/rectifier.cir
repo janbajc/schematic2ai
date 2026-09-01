@@ -1,0 +1,11 @@
+* Full-wave bridge rectifier with filter capacitor
+* Classic AC-to-DC power supply front end
+* VAC → D1-D4 bridge → C1 filter → R_LOAD
+VAC   AC   0    SIN(0 12 50)
+D1    AC   PLUS   1N4007
+D2    0    PLUS   1N4007
+D3    MINUS 0     1N4007
+D4    MINUS AC    1N4007
+C1    PLUS  MINUS  470u
+RLOAD PLUS  MINUS  1k
+.end

@@ -1,0 +1,15 @@
+* Differential pair amplifier — building block of op-amps
+* Q1 and Q2 form the differential pair, biased by I_TAIL
+* RC1 and RC2 are collector load resistors
+* Input: differential signal between INP and INM
+* Output: differential at nodes C1 and C2
+VCC    VCC   0     12
+VINP   INP   0     SIN(6 0.01 1k)
+VINM   INM   0     DC 6
+RC1    VCC   C1    4.7k
+RC2    VCC   C2    4.7k
+Q1     C1    INP   TAIL  2N3904
+Q2     C2    INM   TAIL  2N3904
+ITAIL  TAIL  0     1m
+RE     TAIL  0     12k
+.end

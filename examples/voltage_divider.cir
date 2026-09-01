@@ -1,0 +1,7 @@
+* Simple resistive voltage divider
+* Vout = VIN × R2/(R1+R2) = 5V × 10k/(10k+10k) = 2.5 V
+* This is the simplest possible circuit for testing basic parsing.
+VIN  IN   0    5
+R1   IN   OUT  10k
+R2   OUT  0    10k
+.end
