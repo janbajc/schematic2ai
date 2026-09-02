@@ -19,7 +19,7 @@ from pathlib import Path
 
 import sexpdata
 
-from ..ir import Schematic, Component, Net, Connection, Pin
+from ..ir import Component, Connection, Net, Pin, Schematic
 from .base import BaseParser
 
 
