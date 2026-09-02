@@ -16,4 +16,4 @@ output/
 *.pdf
 *.SchDoc
 # Nix build output
-result/*
+result
