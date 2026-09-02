@@ -49,8 +49,19 @@ def _child_value(tree, tag: str) -> str:
     if node is None or len(node) < 2:
         return ""
     item = node[1]
-    return item.value() if isinstance(item, sexpdata.Symbol) else str(item)
+    value = item.value() if isinstance(item, sexpdata.Symbol) else str(item)
+    # KiCad writes "~" for blank fields, e.g. (value "~").
+    return "" if value == "~" else value
 
+
+# KiCad pintype -> IR Pin.direction ("input" | "output" | "bidir" | "power").
+_PIN_TYPE_DIRECTIONS = {
+    "input": "input",
+    "output": "output",
+    "bidirectional": "bidir",
+    "power_in": "power",
+    "power_out": "power",
+}
 
 class KicadNetlistParser(BaseParser):
     format_name = "kicad_netlist"
@@ -91,9 +102,16 @@ class KicadNetlistParser(BaseParser):
                 pin_refs.append(f"{ref}.{pin}")
                 comp = by_ref.get(ref)
                 if comp is not None:
-                    comp.pins.append(
-                        Pin(number=pin, name=_child_value(node, "pinfunction"), net=name)
-                    )
+                  comp.pins.append(
+                      Pin(
+                          number=pin,
+                          name=_child_value(node, "pinfunction"),
+                          net=name,
+                          direction=_PIN_TYPE_DIRECTIONS.get(
+                              _child_value(node, "pintype"), ""
+                          ),
+                      )
+                  )
 
             net = Net(name=name, nodes=pin_refs)
             upper = name.upper()

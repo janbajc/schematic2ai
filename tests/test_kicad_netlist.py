@@ -27,4 +27,10 @@ def test_parses_components_nets_connections():
     assert len(sch.connections) == 2
 
     u1 = next(c for c in sch.components if c.reference == "U1")
-    assert any(p.number == "7" and p.name == "GND_7" and p.net == "GND" for p in u1.pins)
+    assert u1.footprint == ""  # KiCad writes "~" for blank fields
+    assert any(
+        p.number == "7" and p.name == "GND_7" and p.net == "GND"
+        and p.direction == "power"  # pintype power_in
+        for p in u1.pins
+    )
+    assert next(p for p in u1.pins if p.number == "6").direction == "power"  # power_out
