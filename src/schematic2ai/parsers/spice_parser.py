@@ -142,4 +142,4 @@ def _looks_like_non_spice(path: Path) -> bool:
         head = path.read_text(errors="ignore")[:256].lstrip().lower()
     except OSError:
         return False
-    return "<?xml" in head or head.startswith("!pads") or head.startswith("(export")
+    return "<?xml" in head or head.startswith(("!pads", "(export"))
