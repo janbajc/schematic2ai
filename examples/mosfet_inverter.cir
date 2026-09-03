@@ -1,0 +1,9 @@
+* CMOS Inverter — fundamental digital building block
+* NMOS pulls output low when input is high
+* PMOS pulls output high when input is low
+* Based on standard CMOS logic design
+VDD  VDD  0    3.3
+VIN  IN   0    PULSE(0 3.3 0 1n 1n 50n 100n)
+M1   OUT  IN   0    0    NMOS  W=2u  L=0.35u
+M2   OUT  IN   VDD  VDD  PMOS  W=4u  L=0.35u
+.end

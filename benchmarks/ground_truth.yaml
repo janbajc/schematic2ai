@@ -87,3 +87,12 @@ examples/diff_pair.cir:
     ITAIL: current source
     Q1: transistor (BJT)
     Q2: transistor (BJT)
+
+examples/kicad_mini.net:
+  format: kicad_netlist
+  components: [R1, U1]
+  nets: ["GND", "/3v3"]
+  connections: 2
+  kinds:
+    R1: resistor
+    U1: integrated circuit

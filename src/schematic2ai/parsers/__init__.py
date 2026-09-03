@@ -14,10 +14,12 @@ from .altium_parser import AltiumParser
 from .eagle_parser import EagleParser
 from .spice_parser import SpiceParser
 from .gerber_parser import GerberParser
+from .kicad_netlist_parser import KicadNetlistParser
 
 
 # Order matters: most specific first.
 _PARSERS: list[type[BaseParser]] = [
+    KicadNetlistParser,
     KiCadParser,
     AltiumParser,
     EagleParser,
@@ -47,7 +49,7 @@ def parse(path: Path, output_dir: Optional[Path] = None) -> Schematic:
         raise ValueError(
             f"No parser found for {path}. "
             f"Supported: .pdf, .png/.jpg, .kicad_sch, .sch (KiCad/EAGLE/Altium), "
-            f".SchDoc, .net/.cir/.sp (SPICE), .gbr/.gerber."
+            f".SchDoc, .net (SPICE or KiCad netlist), .cir/.sp (SPICE), .gbr/.gerber."
         )
     parser = parser_cls()
     return parser.parse(path, output_dir=output_dir)

@@ -1,0 +1,12 @@
+(export (version "E")
+  (design (source "mini.kicad_sch"))
+  (components
+    (comp (ref "R1") (value "10k") (footprint "Resistor_SMD:R_0603"))
+    (comp (ref "U1") (value "ESP32-C3-SuperMini") (footprint "~")))
+  (nets
+    (net (code "1") (name "GND")
+      (node (ref "R1") (pin "2"))
+      (node (ref "U1") (pin "7") (pinfunction "GND_7") (pintype "power_in")))
+    (net (code "2") (name "/3v3")
+      (node (ref "R1") (pin "1"))
+      (node (ref "U1") (pin "6") (pinfunction "3V3_6") (pintype "power_out")))))
